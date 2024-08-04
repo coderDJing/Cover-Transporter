@@ -1,4 +1,10 @@
-# setsongcovertool
+# Cover-Transporter
+## 简介
+提取一个mp3文件的封面，并批量写入另一组mp3文件中
+支持win和mac
+
+
+# Cover-Transporter
 
 An Electron application with Vue
 
