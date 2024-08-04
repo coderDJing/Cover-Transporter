@@ -1,5 +1,5 @@
 <script setup>
-import downIcon from "./assets/downIcon.png"
+import downIcon from './assets/downIcon.png'
 import { ref, nextTick } from 'vue'
 
 const sourceMp3Path = ref('')
@@ -16,14 +16,19 @@ const selectSourceMp3 = async () => {
     return
   }
   if (result === 'readFailed') {
-    window.electron.ipcRenderer.send('alert', 'info', '提示', '选择的MP3文件没有封面，请选择有封面的MP3文件', '')
+    window.electron.ipcRenderer.send(
+      'alert',
+      'info',
+      '提示',
+      '选择的MP3文件没有封面，请选择有封面的MP3文件',
+      ''
+    )
     return
   }
   sourceMp3Path.value = result.filePath
   let blob = new Blob([Uint8Array.from(result.imgData.imageBuffer)], { type: result.imgData.mime })
   URL.revokeObjectURL(blobUrl.value)
   blobUrl.value = URL.createObjectURL(blob)
-
 }
 const selectFolders = ref([])
 const mode = ref('')
@@ -65,7 +70,8 @@ const launch = () => {
     return
   }
   loading.value = true
-  window.electron.ipcRenderer.send('replaceCover',
+  window.electron.ipcRenderer.send(
+    'replaceCover',
     mode.value + '',
     sourceMp3Path.value + '',
     JSON.parse(JSON.stringify(mode.value === 'folder' ? selectFolders.value : selectMp3Files.value))
@@ -85,13 +91,25 @@ window.electron.ipcRenderer.on('progressBar', (event, nowNum, total) => {
     })
   }
 })
-
 </script>
 
 <template>
-  <div v-show="loading"
-    style="width: 100vw; height: 100vh;position: absolute;z-index: 999;top: 0;left: 0;background-color: rgba(0,0,0,0.8);display: flex;justify-content: center;align-items: center;">
-    <div style="font-size: 20px;">
+  <div
+    v-show="loading"
+    style="
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <div style="font-size: 20px">
       <div class="container">
         <div class="progress">
           <div class="progress-bar" :style="'width:' + (barNowNum / barTotal) * 100 + '%'"></div>
@@ -142,8 +160,19 @@ window.electron.ipcRenderer.on('progressBar', (event, nowNum, total) => {
       </div>
     </div>
   </div>
-  <div style="position: absolute;bottom: 10px;right: 5px;width: 120px;height: 20px;font-size: 12px;color: #cccccc;">
-    Author : CoderDJing</div>
+  <div
+    style="
+      position: absolute;
+      bottom: 10px;
+      right: 5px;
+      width: 120px;
+      height: 20px;
+      font-size: 12px;
+      color: #cccccc;
+    "
+  >
+    Author : CoderDJing
+  </div>
 </template>
 <style lang="scss" scoped>
 .container {

@@ -2,13 +2,12 @@ import { app, shell, BrowserWindow, ipcMain, Menu, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require('fs').promises
+const path = require('path')
 const NodeID3 = require('node-id3')
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    title: 'setSongCoverTool',
     width: 500,
     height: 670,
     show: false,
@@ -18,7 +17,8 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    }
+    },
+    icon: icon
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -74,28 +74,27 @@ function createWindow() {
   })
 
   async function findMP3Files(directory) {
-    let mp3Files = [];
+    let mp3Files = []
     async function traverseDirectory(dir) {
       try {
-        const entries = await fs.readdir(dir, { withFileTypes: true });
+        const entries = await fs.readdir(dir, { withFileTypes: true })
 
         for (let entry of entries) {
-          const fullPath = path.join(dir, entry.name);
+          const fullPath = path.join(dir, entry.name)
 
           if (entry.isDirectory()) {
             // 递归遍历子目录
-            await traverseDirectory(fullPath);
+            await traverseDirectory(fullPath)
           } else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.mp3') {
             // 如果是MP3文件，则添加到结果数组中
-            mp3Files.push(fullPath);
+            mp3Files.push(fullPath)
           }
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     }
 
-    await traverseDirectory(directory);
-    return mp3Files;
+    await traverseDirectory(directory)
+    return mp3Files
   }
   ipcMain.on('alert', async (e, type, title, message, detail) => {
     dialog.showMessageBox({
@@ -103,8 +102,7 @@ function createWindow() {
       title, // 这里设置对话框的标题
       message,
       detail
-    });
-
+    })
   })
   ipcMain.on('replaceCover', async (e, mode, sourcePath, targetPaths) => {
     // 源MP3文件路径
@@ -118,7 +116,7 @@ function createWindow() {
     }
     if (mode === 'folder') {
       for (let dir of targetPaths) {
-        targetMp3Paths = targetMp3Paths.concat(await findMP3Files(dir));
+        targetMp3Paths = targetMp3Paths.concat(await findMP3Files(dir))
       }
     } else {
       targetMp3Paths = targetPaths
@@ -128,7 +126,6 @@ function createWindow() {
       try {
         NodeID3.update(replaceTags, item)
       } catch (error) {
-
       } finally {
         index++
         mainWindow.webContents.send('progressBar', index, targetMp3Paths.length)

@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: setsongcovertoolforguoji
+productName: MP3封面替换工具
 directories:
   buildResources: build
 files:
@@ -11,7 +11,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: setsongcovertoolforguoji
+  executableName: MP3封面替换工具
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
