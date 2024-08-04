@@ -122,13 +122,17 @@ function createWindow() {
       targetMp3Paths = targetPaths
     }
     let index = 1
+    if(targetMp3Paths.length === 0){
+      mainWindow.webContents.send('progressBar', 1, 1)
+      return
+    }
     for (let item of targetMp3Paths) {
       try {
         NodeID3.update(replaceTags, item)
       } catch (error) {
       } finally {
-        index++
         mainWindow.webContents.send('progressBar', index, targetMp3Paths.length)
+        index++
       }
     }
   })
@@ -148,9 +152,6 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
