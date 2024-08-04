@@ -1,9 +1,12 @@
 # Cover-Transporter
 ## 简介
+替换MP3文件封面的简单软件
+## 操作
 提取一个mp3文件的封面，并批量写入另一组mp3文件中
-支持win和mac
 ![图片说明](https://raw.githubusercontent.com/coderDJing/Cover-Transporter/main/SoftwareScreenshot.jpg)
 
+##支持平台
+支持win和mac
 # Cover-Transporter
 
 An Electron application with Vue
